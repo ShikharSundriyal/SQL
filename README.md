@@ -10,4 +10,6 @@ Co-related query : here for each row of outer query the inner query is executed.
 Example : Find 2nd highest salary</br>
 select id , salary from emp emp1 where 1 =  (select count(distinct salary) from emp emp2 where emp2.salary > emp1.salary); 
 
-Join : the two tables are joined and put into a buffer space .
+Join : the two tables are joined and put into a buffer space .</br>
+
+split in postgres : split_part(columnname, 'character on which to split', index) -> index of the element which we need to get, starting from 1 
