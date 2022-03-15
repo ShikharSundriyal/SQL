@@ -1,5 +1,16 @@
 # SQL
 
+## Order of execution : 
+
+1. from and join
+2. where
+3. group by
+4. having
+5. select
+6. distinct
+7. order by
+8. limit
+
 ## Subquery vs corelated query vs Join
 
 Subquery : the inner query is executed first and then the outer query is executed.
