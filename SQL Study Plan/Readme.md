@@ -10,3 +10,17 @@ on DATEDIFF(w1.recordDate, w2.recordDate) = 1
 and 
 w1.temperature > w2.temperature;
 ```
+
+607. Sales Person
+  - Write an SQL query to report the names of all the salespersons who did not have any orders related to the company with the name "RED".
+```sql
+select 
+name
+from SalesPerson 
+where sales_id not in (
+select o.sales_id
+from
+orders o where com_id  in (select com_id from Company where name = 'RED' )
+)
+
+```
