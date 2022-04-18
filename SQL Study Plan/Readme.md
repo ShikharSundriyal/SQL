@@ -24,3 +24,18 @@ orders o where com_id  in (select com_id from Company where name = 'RED' )
 )
 
 ```
+1141. User Activity for the Past 30 Days I
+  - Write an SQL query to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least one activity on that day.
+
+```sql
+# Write your MySQL query statement below
+
+SELECT 
+activity_date day,
+count(distinct user_id) active_users
+FROM
+Activity
+where 
+DATEDIFF('2019-07-27',activity_date) < 30
+group by activity_date;
+```
