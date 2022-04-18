@@ -39,3 +39,29 @@ where
 DATEDIFF('2019-07-27',activity_date) < 30
 group by activity_date;
 ```
+
+1693. Daily Leads and Partners
+  - Write an SQL query that will, for each date_id and make_name, return the number of distinct lead_id's and distinct partner_id's.
+
+```sql
+select 
+date_id,
+make_name,
+count(distinct lead_id) unique_leads,
+count(distinct partner_id) unique_partners
+from DailySales
+group by 1,2;
+```
+
+1729. Find Followers Count
+  - Write an SQL query that will, for each user, return the number of followers.
+```sql
+# Write your MySQL query statement below
+
+select 
+user_id,
+count(distinct follower_id) followers_count
+from
+Followers
+group by 1;
+```
