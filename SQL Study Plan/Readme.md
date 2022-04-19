@@ -65,3 +65,75 @@ from
 Followers
 group by 1;
 ```
+
+586. Customer Placing the Largest Number of Orders
+
+  - Write an SQL query to find the customer_number for the customer who has placed the largest number of orders.
+```sql
+# Write your MySQL query statement below
+
+
+with ct as (SELECT
+customer_number,
+count(distinct order_number) cnt
+from 
+Orders
+group by 1)
+select customer_number
+from ct
+where cnt in (select max(cnt) from ct)
+```
+
+
+511. Game Play Analysis I
+  - Write an SQL query to report the first login date for each player.
+```sql
+# Write your MySQL query statement below
+
+select 
+player_id,
+min(event_date) first_login
+from Activity
+group by 1
+
+```
+
+1741. Find Total Time Spent by Each Employee
+  - Write an SQL query to calculate the total time in minutes spent by each employee on each day at the office. Note that within one day, an employee can enter and leave more than once. The time spent in the office for a single entry is out_time - in_time.
+
+```sql
+# Write your MySQL query statement below
+
+with t as (
+select emp_id,event_day,
+    out_time-in_time timeSpent
+    from 
+    Employees
+)
+
+select 
+event_day day,
+emp_id,
+    sum(timeSpent) total_time
+    from t
+    group by 1 ,2
+```
+
+1890. The Latest Login in 2020
+  - Write an SQL query to report the latest login for all users in the year 2020. Do not include the users who did not login in 2020.
+
+```sql
+# Write your MySQL query statement below
+with t as (select
+user_id,
+time_stamp
+from Logins
+where 
+YEAR(time_stamp)  = 2020
+)
+SELECT
+user_id,
+MAX(time_stamp) last_stamp
+FROM t
+GROUP BY 1;
+```
