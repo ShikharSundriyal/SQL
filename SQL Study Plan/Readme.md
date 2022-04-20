@@ -137,3 +137,91 @@ MAX(time_stamp) last_stamp
 FROM t
 GROUP BY 1;
 ```
+
+1393. Capital Gain/Loss :
+  - Write an SQL query to report the Capital gain/loss for each stock.The Capital gain/loss of a stock is the total gain or loss after buying and selling the stock one or many times.
+ 
+```sql
+# Write your MySQL query statement below
+
+
+select 
+stock_name,
+sum(sell_val)-sum(buy_val) capital_gain_loss
+from 
+(SELECT
+stock_name,
+CASE WHEN operation = 'Buy' THEN sum(price) else 0 END buy_val,
+CASE WHEN operation ='Sell' THEN sum(price) else 0 END sell_val
+from 
+Stocks
+group by stock_name,operation
+) t
+group by stock_name;
+    
+
+
+-- Approach 2
+SELECT 
+stock_name,
+SUM( CASE WHEN operation = 'Buy' then price*-1 
+    else price END)capital_gain_loss
+from Stocks
+group by stock_name
+```
+
+1407. Top Travellers :
+  - Write an SQL query to report the distance traveled by each user.Return the result table ordered by travelled_distance in descending order, if two or more users traveled the same distance, order them by their name in ascending order.
+
+```sql
+# Write your MySQL query statement below
+
+
+select 
+name, 
+coalesce(travelled_distance,0)travelled_distance
+# case when travelled_distance is null then 0 ELSE travelled_distance END travelled_distance
+from
+(select 
+user_id,
+sum(distance) travelled_distance
+from Rides
+group by user_id) t
+right join Users
+on t.user_id= Users.id
+order by travelled_distance desc,name
+
+```
+
+
+1158. Market Analysis I :
+  - Write an SQL query to find for each user, the join date and the number of orders they made as a buyer in 2019. Return the result table in any order.
+
+```sql
+# Write your MySQL query statement beloW
+
+Select 
+user_id buyer_id,
+join_date,
+coalesce(order_count,0) orders_in_2019
+from Users 
+left join
+(select 
+buyer_id,
+count(order_id) order_count
+ from Orders
+where 
+year(order_date) = 2019 
+group by buyer_id
+) t 
+on buyer_id = user_id
+
+--Approach 2
+
+SELECT u.user_id AS buyer_id ,u.join_date ,COUNT(o.buyer_id) AS orders_in_2019 
+FROM Users u LEFT JOIN Orders o
+ON u.user_id = o.buyer_id AND YEAR(o.order_date) ='2019'
+GROUP BY u.user_id
+
+
+```
