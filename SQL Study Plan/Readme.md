@@ -225,3 +225,67 @@ GROUP BY u.user_id
 
 
 ```
+
+182. Duplicate Emails :
+```sql
+# Write your MySQL query statement below
+
+SELECT 
+email from
+(select email,count(*) c
+from Person
+group by 1
+) t where c>1
+```
+
+1050. Actors and Directors Who Cooperated At Least Three Times
+  - Write a SQL query for a report that provides the pairs (actor_id, director_id) where the actor has cooperated with the director at least three times.
+```sql
+# Write your MySQL query statement below
+
+select 
+actor_id,
+director_id
+from ActorDirector
+group by actor_id,
+director_id
+having count(*) >= 3
+```
+1587. Bank Account Summary II
+  - Write an SQL query to report the name and balance of users with a balance higher than 10000. The balance of an account is equal to the sum of the amounts of all transactions involving that account.
+```sql
+# Write your MySQL query statement below
+
+
+SELECT 
+users.name,
+SUM(tran.amount) balance
+from Transactions tran
+join 
+Users users
+on tran.account = users.account
+group by users.name
+having balance > 10000
+```
+1084. Sales Analysis III :
+  - Write an SQL query that reports the products that were only sold in the spring of 2019. That is, between 2019-01-01 and 2019-03-31 inclusive.
+```sql
+# Write your MySQL query statement below
+
+
+
+SELECT 
+Sales.product_id,
+Product.product_name
+from
+Sales 
+join
+Product
+on
+Sales.product_id = Product.product_id
+group by 1,2
+having
+min(Sales.sale_date) >= "2019-01-01" and max(Sales.sale_date) <= "2019-03-31"
+
+
+```
