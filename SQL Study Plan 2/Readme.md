@@ -91,4 +91,72 @@ on s1.sale_date = s2.sale_date and s1.fruit='apples' and s1.fruit!=s2.fruit
 order by s1.sale_date
 ```
 
+1193. Monthly Transactions I
+  - Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+```sql
+# Write your MySQL query statement below
 
+
+select
+DATE_FORMAT(trans_date,"%Y-%m") month,
+country,
+count(*) trans_count,
+sum(case when state='approved' then 1 else 0 end) approved_count
+,sum(amount) trans_total_amount,
+sum(case when state='approved' then amount else 0 end) approved_total_amount
+from 
+Transactions
+group by 1,2
+
+```
+
+1633. Percentage of Users Attended a Contest :
+  - Write an SQL query to find the percentage of the users registered in each contest rounded to two decimals.
+
+```sql
+
+select 
+contest_id,
+Round(count(distinct user_id)/(select count(*) from Users) * 100,2)percentage
+from Register
+group by 1
+order by 2 desc, 1 ;
+```
+1173. Immediate Food Delivery I
+  - If the customer's preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+```sql
+select 
+ROUND(sum(case when order_date=customer_pref_delivery_date then 1 else 0 end) 
+/ (select count(delivery_id) from Delivery) *100,2) immediate_percentage
+from 
+Delivery;
+
+--Approach 2
+
+select ROUND(count(*)/
+(select count(delivery_id) from Delivery) *100,2) immediate_percentage
+from 
+Delivery
+WHERE 
+order_date=customer_pref_delivery_date
+```
+
+
+1211. Queries Quality and Percentage :
+  - We define query quality as:
+  - The average of the ratio between query rating and its position.
+  - We also define poor query percentage as:
+  - The percentage of all queries with rating less than 3.
+  - Write an SQL query to find each query_name, the quality and poor_query_percentage.
+  - Both quality and poor_query_percentage should be rounded to 2 decimal places.
+  - Return the result table in any order.
+
+```sql
+SELECT 
+query_name,
+ROUND( sum(rating/position) / count(*),2) quality,
+ROUND((1.0*sum(case when rating < 3 then 1 else 0 END)) / count(*)*100,2)  poor_query_percentage
+from 
+Queries
+group by 1;
+```
