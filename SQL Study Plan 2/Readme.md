@@ -160,3 +160,123 @@ from
 Queries
 group by 1;
 ```
+
+1607. Sellers With No Sales :
+  - Write an SQL query to report the names of all sellers who did not make any sales in 2020.
+ 
+
+```sql
+
+select seller_name
+from Seller 
+where 
+seller_id not in
+(
+    select 
+    seller_id
+    from Orders
+    where year(sale_date) = 2020
+ )
+order by 1 
+
+--Approach 2
+
+select seller_name
+from seller left join orders
+on seller.seller_id = orders.seller_id
+AND year(sale_date) = "2020"
+where order_id is null
+order by seller_name
+```
+
+619. Biggest Single Number
+  - A single number is a number that appeared only once in the MyNumbers table.Write an SQL query to report the largest single number. If there is no single number, report null.
+```sql
+select max(num) num
+from
+(select 
+num,
+count(*) cnt
+from MyNumbers
+group by 1
+) t
+where cnt = 1;
+```
+
+1112. Highest Grade For Each Student :
+  - Write a SQL query to find the highest grade with its corresponding course for each student. In case of a tie, you should find the course with the smallest course_id.
+
+```sql
+# Write your MySQL query statement below
+
+
+with ct as (select 
+student_id,
+course_id,
+grade,
+row_number() over (partition by student_id order by grade desc,course_id) rnk
+from 
+Enrollments)
+select 
+student_id,
+course_id,
+grade 
+from ct 
+where rnk =1;
+
+--Approach 2
+
+SELECT student_id, MIN(course_id) AS course_id,grade FROM Enrollments
+WHERE (student_id,grade) IN
+(SELECT DISTINCT student_id, max(grade) 
+ FROM Enrollments GROUP BY student_id)
+GROUP BY student_id
+ORDER BY student_id;
+```
+
+
+1398. Customers Who Bought Products A and B but Not C
+  - Write an SQL query to report the customer_id and customer_name of customers who bought products "A", "B" but did not buy the product "C" since we want to recommend them to purchase this product.
+
+```sql
+# Write your MySQL query statement below
+
+select distinct
+o1.customer_id,
+c1.customer_name
+from 
+Orders o1
+join 
+Customers c1
+on o1.customer_id = c1.customer_id
+where
+o1.customer_id in (select distinct customer_id from Orders where product_name='A')
+and
+o1.customer_id in (select distinct customer_id from Orders where product_name='B')
+and 
+o1.customer_id NOT in (select distinct customer_id from Orders where product_name='C')
+order by 1
+
+-- Approch 2
+select 
+customer_id,
+customer_name
+from
+(select 
+o1.customer_id,
+c1.customer_name,
+sum(case when product_name='A' then 1 else 0 end)ca,
+sum(case when product_name='B' then 1 else 0 end)cb,
+sum(case when product_name='C' then 1 else 0 end)cc
+from
+Orders o1
+join
+Customers c1
+on 
+c1.customer_id = o1.customer_id
+group by 1,2
+) ct
+where 
+ca>=1 and cb>=1 and cc=0
+order by 1;
+```
