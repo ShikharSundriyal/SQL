@@ -280,3 +280,103 @@ where
 ca>=1 and cb>=1 and cc=0
 order by 1;
 ```
+
+1440. Evaluate Boolean Expression :
+  - Write an SQL query to evaluate the boolean expressions in Expressions table.
+```sql
+# Write your MySQL query statement below
+
+
+with ct as(Select
+        left_operand,   
+v1.value left_operand1,
+operator,
+           right_operand,
+v2.value right_operand1
+from 
+Expressions
+join 
+Variables v1
+on 
+left_operand = v1.name
+join
+Variables v2 on
+right_operand = v2.name
+)
+select 
+left_operand,
+operator,
+right_operand,
+case 
+    when operator="=" and left_operand1 = right_operand1 then 'true'
+    when operator=">" and left_operand1 > right_operand1 then 'true' 
+    when operator="<" and left_operand1 < right_operand1 then 'true'
+    else 'false'
+    END value
+from ct
+
+```
+
+1264. Page Recommendations :
+  - Write an SQL query to recommend pages to the user with user_id = 1 using the pages that your friends liked. It should not recommend pages you already liked.
+
+```sql
+
+select 
+distinct page_id recommended_page
+from 
+Likes where
+user_id in
+(select 
+user2_id
+from 
+Friendship where 
+user1_id = 1
+union
+select 
+user1_id
+from 
+Friendship where 
+user2_id = 1) and page_id not in (select page_id from Likes where user_id = 1)
+
+```
+
+570. Managers with at Least 5 Direct Reports :
+  - Write an SQL query to report the managers with at least five direct reports.
+
+```sql
+select 
+name
+from  
+Employee 
+where id  in (
+select
+managerId
+from Employee
+group by 1
+having count(managerId) >=5
+)
+```
+1303. Find the Team Size :
+  - Write an SQL query to find the team size of each of the employees.
+
+```sql
+with ct as(select
+team_id,
+count(*) sz
+from Employee
+group by 1
+ )
+ select 
+ employee_id,
+ sz team_size
+ from Employee
+ join
+ ct
+ on
+ Employee.team_id = ct.team_id
+ 
+ --Approach 2
+ select employee_id, count(team_id) over (partition by team_id) as team_size
+from employee
+```
