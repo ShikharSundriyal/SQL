@@ -411,3 +411,44 @@ on
 ct.school_id = Schools.school_id
 
 ```
+
+180. Consecutive Numbers
+  - Write an SQL query to find all numbers that appear at least three times consecutively.
+
+```sql
+select
+distinct l1.num ConsecutiveNums
+from 
+Logs l1
+join
+Logs l2
+on l1.id = l2.id+1 and l1.num = l2.num
+join
+Logs l3
+on
+l2.id+1 = l3.id+2 and l2.num = l3.num
+```
+
+1459. Rectangles Area
+  - Write an SQL query to report all possible axis-aligned rectangles with a non-zero area that can be formed by any two points from the Points table.
+  - Each row in the result should contain three columns (p1, p2, area) where:
+  - p1 and p2 are the id's of the two points that determine the opposite corners of a rectangle
+  - area is the area of the rectangle and must be non-zero.
+  - Return the result table ordered by area in descending order. If there is a tie, order them by p1 in ascending order. If there is still a tie, order them by p2 in ascending order.
+ 
+```sql
+# Write your MySQL query statement below
+select 
+p1.id p1,
+p2.id p2,
+abs(p1.x_value - p2.x_value)* abs(p1.y_value- p2.y_value) area
+from
+Points p1
+join
+Points p2
+on 
+p1.x_value!=p2.x_value and p1.y_value!=p2.y_value and p1.id!=p2.id
+where
+p1.id<p2.id
+order by area desc, p1 , p2
+```
