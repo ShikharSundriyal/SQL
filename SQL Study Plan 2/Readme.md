@@ -380,3 +380,34 @@ group by 1
  select employee_id, count(team_id) over (partition by team_id) as team_size
 from employee
 ```
+
+1988. Find Cutoff Score for Each School
+  - Write an SQL query to report the minimum score requirement for each school. If there are multiple score values satisfying the above conditions, choose the smallest one. If the input data is not enough to determine the score, report -1.
+
+
+```sql
+# Write your MySQL query statement below
+
+
+with ct as (select
+school_id,
+min(score) score
+from 
+Schools,
+Exam
+where 
+capacity >= student_count
+group by 
+1)
+
+select 
+Schools.school_id,
+coalesce(ct.score,-1) score
+from 
+Schools
+left join
+ct
+on
+ct.school_id = Schools.school_id
+
+```
