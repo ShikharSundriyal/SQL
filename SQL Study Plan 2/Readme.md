@@ -450,5 +450,5 @@ on
 p1.x_value!=p2.x_value and p1.y_value!=p2.y_value and p1.id!=p2.id
 where
 p1.id<p2.id
-order by area desc, p1 , p2
+order by area desc, p1 , p2 
 ```
