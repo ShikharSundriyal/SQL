@@ -24,3 +24,25 @@ select id , salary from emp emp1 where 1 =  (select count(distinct salary) from 
 Join : the two tables are joined and put into a buffer space .</br>
 
 split in postgres : split_part(columnname, 'character on which to split', index) -> index of the element which we need to get, starting from 1 
+
+## Recursive Query 
+
+
+Get All employees under  manager
+
+with recursive recur_ct as (
+	
+	select id,name, 1 as level 
+	from table where name = 'Manager'
+	union
+	select B.id, B.name, level+1 as level
+	from
+	recur_ct A
+	join
+	table B
+	on
+	A.id = B.manager_id
+)
+select * from recur_ct;
+
+Recursive query in spark :
